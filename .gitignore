@@ -29,3 +29,11 @@ go.work.sum
 
 # Files
 heretic.db
+heretic-decrypt-linux
+heretic-decyrpt-windows
+heretic-decyrpt-darwin
+
+heretic-linux
+heretic-windows
+heretic-darwin
+2
