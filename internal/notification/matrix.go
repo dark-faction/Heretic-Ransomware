@@ -1,5 +1,7 @@
-package main
+package notification
 
-func main() {
+import "fmt"
 
+func Matrix() {
+	fmt.Println("Encryption process complete, notifying via Matrix")
 }

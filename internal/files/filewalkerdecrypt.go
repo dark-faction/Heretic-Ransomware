@@ -1,5 +1,5 @@
-package main
+package files
 
-func main() {
-	
+func FileWalkerDecrypt() {
+
 }

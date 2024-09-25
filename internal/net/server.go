@@ -1,5 +1,5 @@
-package main
+package net
 
-func main() {
-	
+func Server() {
+
 }

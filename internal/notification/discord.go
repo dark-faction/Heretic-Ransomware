@@ -1,5 +1,5 @@
-package main
+package notification
 
-func main() {
+func Discord() {
 
 }
